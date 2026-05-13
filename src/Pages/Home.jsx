@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import api from "../Api";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -47,9 +48,10 @@ export default function Home() {
           </div> */}
 
           {/* Login */}
-          <button className="bg-rose-500 hover:bg-rose-600 text-white px-5 py-2 rounded-xl font-semibold shadow-md shadow-rose-200 transition">
+    
+          <Link to="/login" className="bg-rose-500 hover:bg-rose-600 text-white px-5 py-2 rounded-xl font-semibold shadow-md shadow-rose-200 transition">
             Login
-          </button>
+          </Link>
         </div>
       </nav>
 
