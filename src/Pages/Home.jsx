@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import api from "../Api";
 import { Link } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { logout as logoutAction } from "../Store/AuthSlice";
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-
+  const is_authenticated = useSelector((state) => state.auth.is_authenticated); // Replace with actual authentication logic
+  const user = useSelector((state) => state.auth.user); // Replace with actual authentication logic
+  const dispatch = useDispatch();
   const totalPages = useRef(5); // Assuming there are 5 pages of products
   const renderCount = useRef(0); // Assuming there are 5 pages of products
   renderCount.current = renderCount.current + 1;
@@ -23,6 +26,19 @@ export default function Home() {
       })
       .finally(() => setLoading(false));
   }, [currentPage]);
+
+  const logout = function () {
+    api
+      .post("/auth/logout/")
+      .then((response) => {
+        // Handle successful logout, e.g., clear token, redirect, etc.
+        dispatch(logoutAction()); 
+      })
+      .catch((error) => {
+        // Handle logout error, e.g., show error message
+        console.error("Logout failed: " + error);
+      });
+  };
 
   return (
     <div className="min-h-screen bg-rose-50">
@@ -48,10 +64,27 @@ export default function Home() {
           </div> */}
 
           {/* Login */}
-    
-          <Link to="/login" className="bg-rose-500 hover:bg-rose-600 text-white px-5 py-2 rounded-xl font-semibold shadow-md shadow-rose-200 transition">
-            Login
-          </Link>
+          {is_authenticated ? (
+            <>
+            
+              <span className="text-rose-600 font-semibold">
+                Welcome, {user.name}!
+              </span>
+              <button
+                onClick={logout}
+                className="bg-rose-500 hover:bg-rose-600 text-white px-5 py-2 rounded-xl font-semibold shadow-md shadow-rose-200 transition"
+              >
+                Logout
+              </button>{" "}
+            </>
+          ) : (
+            <Link
+              to="/login"
+              className="bg-rose-500 hover:bg-rose-600 text-white px-5 py-2 rounded-xl font-semibold shadow-md shadow-rose-200 transition"
+            >
+              Login
+            </Link>
+          )}
         </div>
       </nav>
 

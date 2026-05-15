@@ -1,6 +1,37 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../Api";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../Store/AuthSlice";
 
 function Login() {
+  const [formdata, setFormdata] = useState({
+    email: "",
+    password: "",
+  });
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    setFormdata({ ...formdata, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    api.post("/auth/login/", formdata)
+      .then((response) => {
+        // Handle successful login, e.g., store token, redirect, etc.
+      
+        dispatch(login({ user: response.data.data.user, token: response.data.data.access_token }));
+        navigate("/"); // Redirect to dashboard or home page after login
+      })
+      .catch((error) => {
+        // Handle login error, e.g., show error message
+        console.error("Login failed: " + error);
+      }); 
+    // Handle login logic here
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-rose-50 px-4">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 border border-rose-100">
@@ -12,7 +43,7 @@ function Login() {
         </div>
 
         {/* Form */}
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit}>
           {/* Email */}
           <div>
             <label className="block text-sm font-medium text-rose-700 mb-2">
@@ -22,6 +53,9 @@ function Login() {
             <input
               type="email"
               placeholder="Enter your email"
+              name="email"
+              value={formdata.email}
+              onChange={handleChange}
               className="w-full px-4 py-3 rounded-2xl border border-rose-200 bg-rose-50/50 text-gray-700 placeholder-rose-300 outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition"
             />
           </div>
@@ -34,6 +68,9 @@ function Login() {
 
             <input
               type="password"
+              name="password"
+              value={formdata.password}
+              onChange={handleChange}
               placeholder="Enter your password"
               className="w-full px-4 py-3 rounded-2xl border border-rose-200 bg-rose-50/50 text-gray-700 placeholder-rose-300 outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition"
             />
