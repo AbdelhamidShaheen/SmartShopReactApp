@@ -3,7 +3,7 @@ import api from "../Api";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../Store/AuthSlice";
-
+import { toast } from "react-hot-toast";
 function Login() {
   const [formdata, setFormdata] = useState({
     email: "",
@@ -21,14 +21,10 @@ function Login() {
     api.post("/auth/login/", formdata)
       .then((response) => {
         // Handle successful login, e.g., store token, redirect, etc.
-      
         dispatch(login({ user: response.data.data.user, token: response.data.data.access_token }));
         navigate("/"); // Redirect to dashboard or home page after login
-      })
-      .catch((error) => {
-        // Handle login error, e.g., show error message
-        console.error("Login failed: " + error);
-      }); 
+      });
+      
     // Handle login logic here
   };
 
