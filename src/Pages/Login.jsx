@@ -3,7 +3,6 @@ import api from "../Api";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../Store/AuthSlice";
-import { toast } from "react-hot-toast";
 function Login() {
   const [formdata, setFormdata] = useState({
     email: "",

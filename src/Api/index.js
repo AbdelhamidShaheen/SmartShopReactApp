@@ -27,14 +27,14 @@ api.interceptors.response.use(
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
     if (response.data.message) {
-      toast.success(response.data.message, { duration: 3000, });
+      toast.success(response.data.message, { duration: 3000 ,  className: 'w-full' });
     }
     return response;
   },
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
-    toast.error(error.response.data.message, { duration: 3000 });
+    toast.error(error.response.data.message, { duration: 3000 ,  className: 'w-full'});
     return Promise.reject(error);
   },
 );
