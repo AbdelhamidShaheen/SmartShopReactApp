@@ -1,12 +1,14 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../Api";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../Store/AuthSlice";
 function Login() {
+  const userType=useParams().userType; // Get the userType from the URL parameters
   const [formdata, setFormdata] = useState({
     email: "",
     password: "",
+    user_type: userType, // Set the userType in the form data
   });
 
   const dispatch = useDispatch();
@@ -21,10 +23,18 @@ function Login() {
       .then((response) => {
         // Handle successful login, e.g., store token, redirect, etc.
         dispatch(login({ user: response.data.data.user, token: response.data.data.access_token }));
-        navigate("/"); // Redirect to dashboard or home page after login
+        handleNavifateToUser(response.data.data.user); // Redirect based on user type
       });
       
     // Handle login logic here
+  };
+
+  const handleNavifateToUser = (user) => {
+    if (user.user_type === "admin") {
+      navigate("/dashboard");
+    } else if (user.user_type === "customer") {
+      navigate("/");
+    }
   };
 
   return (

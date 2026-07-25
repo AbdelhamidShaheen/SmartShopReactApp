@@ -79,7 +79,7 @@ export default function Home() {
             </>
           ) : (
             <Link
-              to="/login"
+              to="/login/customer"
               className="bg-rose-500 hover:bg-rose-600 text-white px-5 py-2 rounded-xl font-semibold shadow-md shadow-rose-200 transition"
             >
               Login
